@@ -35,3 +35,27 @@ const long inter = 2000;
 unsigned long millisPasada = 0;
 uint8_t rango_pulso;
 uint8_t rango_pulso2;
+
+void setup() {
+  // put your setup code here, to run once:
+  //Definir las toma de valores de los leds, botones y el switch utilizado en el programa
+    Serial.begin(9600);
+    
+    pinMode(sensorDigital, INPUT_PULLUP);
+    servo.attach(9);
+    servo2.attach(8);
+    pinMode(A2, INPUT);
+    pinMode(Led_rojo, INPUT);
+    pinMode(Led_verde, INPUT);
+    pinMode(buttonPin, INPUT);
+    pinMode(switchState, INPUT_PULLUP);
+    buttonState = digitalRead(buttonPin);
+    //iniciar el LCD
+    lcd.begin(16,2);
+    lcd.init();
+    lcd.backlight();
+
+    lcd.setCursor(2,0);
+    lcd.print("Bienvenido!!");
+    delay(300);
+}
