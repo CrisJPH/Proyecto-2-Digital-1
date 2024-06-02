@@ -210,3 +210,168 @@ void loop() {
       estadoF = s0;
         break;
     }
+     switch(estadoA){
+      case s0:
+      //mensaje cuando esta iniciando el programa para que pulse el boton
+        digitalWrite(Led_verde, LOW);
+        digitalWrite(Led_rojo, LOW);
+        delay(100);
+        lcd.clear();
+        lcd.begin(16,2);
+        lcd.print("Pulsar boton");
+        lcd.setCursor(0,1);
+        break;
+      case s1:
+      //mensaje que sirve para indicar que puede elegir su edad
+
+        digitalWrite(Led_verde, LOW);
+        digitalWrite(Led_rojo, LOW);
+        delay(2000);
+        lcd.clear();
+        lcd.begin(16,2);
+        lcd.print("Gracias!!");
+        delay(4000);
+        lcd.clear();
+        lcd.begin(16,2);
+        lcd.print("escoge tu edad");
+        lcd.setCursor(0,1);
+        lcd.print("adulto");
+        lcd.setCursor(8,1);
+        lcd.print("niño");
+        delay(4000);
+        break;
+      case s4:
+      //mensaje que sirve para indicar que tiene temp. normal
+        Serial.println("SRV:");
+        digitalWrite(Led_verde,HIGH);
+        digitalWrite(Led_rojo, LOW);
+        delay(4000);
+        lcd.clear();
+        lcd.begin(16,2);
+        lcd.print("Temp normal");
+        lcd.setCursor(0,1);
+        lcd.print("Temp:");
+        lcd.print(rango_temp);
+        //realiza el movimiento del servomotor
+        servo.write(0);
+        servo2.write(0);
+        delay(4000);
+        servo.write(90);
+        servo2.write(0);
+        break;
+      case s5:
+      //mensaje que sirve para indicar que tiene temp. Anormal
+        Serial.print("SRC:");
+        digitalWrite(Led_verde,LOW);
+        digitalWrite(Led_rojo, HIGH);
+        delay(4000);
+        lcd.clear();
+        lcd.begin(16,2);
+        lcd.print("Tiene fiebre");
+        lcd.setCursor(0,1);
+        lcd.print("Temp:");
+        lcd.print(rango_temp);
+        servo.write(180);
+        servo2.write(180);
+        delay(4000);
+        servo.write(90);
+        servo2.write(0);
+        
+        delay(1000);
+        break;
+      case s6:
+        break;
+      case s9:
+      //mensaje que sirve para indicar que tiene pulso normal
+        Serial.print("SCC:");
+        digitalWrite(Led_verde,HIGH);
+        digitalWrite(Led_rojo, LOW);
+        delay(4000);
+        lcd.clear();
+        lcd.begin(16,2);
+        lcd.print("Pulso normal");
+        lcd.setCursor(0,1);
+        lcd.print("Felicidades!!");
+        servo.write(0);
+        servo2.write(0);
+        delay(4000);
+        servo.write(90);
+        servo2.write(0);
+        delay(1000);
+        
+        break;
+      case s10:
+      //mensaje que sirve para indicar que tiene pulso anormal
+        Serial.print("SMM:");
+        digitalWrite(Led_verde,LOW);
+        digitalWrite(Led_rojo, HIGH);
+        delay(4000);
+        lcd.clear();
+        lcd.begin(16,2);
+        lcd.print("Pulso anormal");
+        lcd.setCursor(0,1);
+        lcd.print("ir al doctor :(");
+        servo.write(180);
+        servo2.write(180);
+        delay(4000);
+        servo.write(90);
+        servo2.write(0);
+        
+        delay(1000);
+        break;
+      case s11:
+      // mensaje que sirve para indicar que tiene que soplar el alcoholimetro
+        lcd.clear();
+        lcd.begin(16,2);
+        lcd.print("Sopla en el");
+        lcd.setCursor(0,1);
+        lcd.print("alcoholimetro");
+        delay(10000);
+        break;
+      case s12:
+      //mensaje para indicar que no esta borracho
+        Serial.print("MMM:");
+        digitalWrite(Led_verde,HIGH);
+        digitalWrite(Led_rojo, LOW);
+        delay(4000);
+        lcd.clear();
+        lcd.begin(16,2);
+        lcd.print("Esta bien");
+        lcd.setCursor(0,1);
+        lcd.print("alcoholismo:");
+        lcd.print(porcentaje);
+        servo.write(0);
+        servo2.write(0);
+        delay(4000);
+        servo.write(90);
+        servo2.write(0);
+        delay(1000);
+        break;
+      case s13:
+      //mensaje para indicar que si esta borracho
+        Serial.print("SRS:");
+        digitalWrite(Led_verde,LOW);
+        digitalWrite(Led_rojo, HIGH);
+        delay(4000);
+        lcd.clear();
+        lcd.begin(16,2);
+        lcd.print("Esta borracho");
+        lcd.setCursor(0,1);
+        lcd.print("alcoholismo:");
+        lcd.print(porcentaje);
+        servo.write(180);
+        servo2.write(180);
+        delay(4000);
+        servo.write(90);
+        servo2.write(0);
+        delay(1000);
+        break;
+      }
+      //sirve para que el switch se siga repitiendo. 
+     unsigned long millisActual = millis();
+     if(millisActual - millisPasada >= inter){
+      estadoA = estadoF;
+      millisPasada = millisActual;
+     }
+     delay(1);
+}
