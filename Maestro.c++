@@ -59,3 +59,154 @@ void setup() {
     lcd.print("Bienvenido!!");
     delay(300);
 }
+
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  //Lectura del boton de inicio para iniciar el programa
+  buttonState = digitalRead(buttonPin);
+  //lectura del switch para saber la edad del paciente
+  bool ciclodevida = digitalRead(switchState);
+  // put your main code here, to run repeatedly:
+    switch(estadoA){
+      case s0:
+      //sirve para saber si se inicia el programa o no
+        if(buttonState == LOW){
+          estadoF = s1;
+        }else{
+          estadoF = s0;
+        }
+        break;
+      case s1:
+        //sirve para saber el ciclo de vida de la persona y mandar a distintos estados 
+        //dependiendo de la respuesta
+        if(ciclodevida == HIGH){
+          estadoF = s3;
+        }else{
+          estadoF = s2;
+        }
+        break;
+      case s2:
+      //toma de temperatura 
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("toma tu temp.");
+        delay(5000);
+         lcd.clear();
+        rango_temp = map(analogRead(A3),0, 1000, 0, 50);
+        lcd.clear();
+        lcd.setCursor(0,1);
+        lcd.print(rango_temp);
+        delay(1000);
+        //si tiene o no tiene fiebre manda a uno de los 2 estados
+        if(rango_temp <= 37){
+          estadoF = s4;
+        }else{
+          estadoF = s5;
+        }
+        break;
+      case s3:
+      //lo mismo que el caso S2
+        Serial.print("SRC:");
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("toma tu temp.");
+        delay(5000);
+        lcd.clear();
+        rango_temp = map(analogRead(A3),0, 1000, 0, 50);
+        lcd.clear();
+        lcd.setCursor(0,1);
+        lcd.print(rango_temp);
+        delay(1000);
+        if(rango_temp <= 37){
+          estadoF = s4;
+        }else{
+          estadoF = s5;
+        }
+        break;
+      case s4:
+        //manda al estado s6
+        estadoF = s6;
+        break;
+      case s5:
+      //manda al estado s6
+        estadoF = s6;
+        break;
+      case s6:
+      //dependiendo el ciclo de vida escogido anteriormente manda a distintos estados 
+        if(ciclodevida == HIGH){
+          estadoF = s8;
+        }else{
+          estadoF = s7;
+        }
+        break;
+      case s7:
+      //toma de pulso del paciente
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("ajusta tu pulso!!");
+        delay(3000);
+        rango_pulso = map(analogRead(A0),0, 700, 0, 220);
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.println(rango_pulso);
+        delay(2000);
+        lcd.setCursor(0,1);
+         delay(1000);
+        
+        lcd.setCursor(0,1);
+        //dependiendo del pulso del paciente se va a distintos estados
+          if(rango_pulso > 60 && rango_pulso < 120){
+            estadoF = s9;
+          }else{
+            estadoF = s10;
+          }
+        break;
+      case s8:
+      //los mismo que el estado S7
+        lcd.clear();
+        lcd.print("ajusta tu pulso!!");
+        delay(3000);
+        lcd.setCursor(0,0);
+        rango_pulso = map(analogRead(A0),0, 700, 0, 220);
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.println(rango_pulso);
+        delay(2000);
+        lcd.setCursor(0,1);
+        lcd.print(rango_pulso);
+        delay(1000);
+          if(rango_pulso > 60 && rango_pulso < 100){
+            estadoF = s9;
+          }else{
+            estadoF = s10;
+          }
+        break;
+      case s9:
+      //va al estado s11
+        estadoF = s11;
+        break;
+      case s10:
+      //va al estado s11
+        estadoF = s11;
+        break;
+      case s11:
+      //toma de alcoholismo de la persona
+        analog = analogRead(A1);
+        porcentaje = (analog/10000); 
+        //dependiendo del nivel de alcohol se va a distintos estados
+          if(analog > 400){
+          estadoF = s13;
+          }else{
+          estadoF = s12;
+          }
+        break;
+      case s12:
+      //regresa al inicio del programa terminandolo
+      estadoF = s0;
+        break;
+      case s13:
+      //regresa al inicio del programa terminandolo 
+      estadoF = s0;
+        break;
+    }
